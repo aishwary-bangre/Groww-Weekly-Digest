@@ -18,9 +18,8 @@ class Summarizer:
     
     def __init__(self, api_key: str):
         self.api_key = api_key
-        # In a production environment with an active API key:
-        # from langchain_google_genai import ChatGoogleGenerativeAI
-        # self.llm = ChatGoogleGenerativeAI(model="gemini-3.5-flash", google_api_key=api_key)
+        from langchain_groq import ChatGroq
+        self.llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=api_key)
         
         self.parser = JsonOutputParser(pydantic_object=ThemeInsight)
         self.prompt = PromptTemplate(
@@ -38,7 +37,7 @@ class Summarizer:
             input_variables=["reviews_text"],
             partial_variables={"format_instructions": self.parser.get_format_instructions()},
         )
-        # self.chain = self.prompt | self.llm | self.parser
+        self.chain = self.prompt | self.llm | self.parser
 
     def _validate_quote(self, quote: str, original_texts: List[str]) -> bool:
         """
@@ -69,15 +68,9 @@ class Summarizer:
             combined_text = "\n---\n".join(original_texts)
             
             try:
-                # Mocking the LLM call for now, as API key might not be active
-                # response: ThemeInsight = self.chain.invoke({"reviews_text": combined_text})
-                
-                # MOCK RESPONSE (Pretending the LLM returned this)
-                response = ThemeInsight(
-                    theme_name=f"Mocked Theme for Cluster {cluster_id}",
-                    verbatim_quotes=[original_texts[0][:50]], # Guarantee a match for the mock
-                    action_ideas=["Investigate the root cause", "Improve UX"]
-                )
+                # Call the real Gemini API
+                raw_response = self.chain.invoke({"reviews_text": combined_text})
+                response = ThemeInsight(**raw_response)
                 
                 # --- Anti-Hallucination Gate ---
                 validated_quotes = []

@@ -13,19 +13,8 @@ from db import check_if_week_processed, mark_week_processed
 from output.generator import OutputGenerator
 from mcp_client.docs_client import DocsClient
 from mcp_client.gmail_client import GmailClient
-
-from reasoning.summarizer import ThemeInsight
-
-# Note: We are using a mock summarizer here to save Gemini API credits during verification testing
-class MockSummarizer:
-    def summarize_clusters(self, clusters):
-        return {
-            0: ThemeInsight(
-                theme_name="App Crashes on Login",
-                verbatim_quotes=["Can't login", "App crashes on start"],
-                action_ideas=["Investigate auth token expiration", "Check crash logs on Android 13"]
-            )
-        }
+import config
+from reasoning.summarizer import ThemeInsight, Summarizer
 
 def main():
     parser = argparse.ArgumentParser(description="Groww Weekly Review Pulse")
@@ -61,21 +50,22 @@ def main():
     clusterer = Clusterer()
     clustered_dict = clusterer.cluster(cleaned_reviews)
     
+    import os
     logger.info("--- PHASE 3.5: SUMMARIZATION ---")
-    summarizer = MockSummarizer()
+    summarizer = Summarizer(api_key=os.getenv("GROQ_API_KEY"))
     insights = summarizer.summarize_clusters(clustered_dict)
     
     logger.info("--- PHASE 4: OUTPUT GENERATION ---")
     generator = OutputGenerator()
     markdown_content = generator._render_markdown_report(insights)
-    email_payload_dict = generator.generate_email_payload(insights, "https://docs.google.com/document/d/" + args.doc_id, ["pm@groww.in"])
+    email_payload_dict = generator.generate_email_payload(insights, "https://docs.google.com/document/d/" + args.doc_id, ["aishwarybangre@gmail.com"])
     
     logger.info("--- PHASE 5: MCP INTEGRATION ---")
     docs_client = DocsClient()
     docs_client.append_to_doc(args.doc_id, markdown_content)
     
     gmail_client = GmailClient()
-    gmail_client.create_draft("pm@groww.in", f"Groww Pulse: {current_iso_week}", email_payload_dict["body"])
+    gmail_client.send_email("aishwarybangre@gmail.com", f"Groww Pulse: {current_iso_week}", email_payload_dict["body"])
     
     # Mark Success
     mark_week_processed(current_iso_week)
