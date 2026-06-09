@@ -1,0 +1,33 @@
+{
+    "1_example_cleaned_review_in_memory": {
+        "review_id": "gp:123456",
+        "score": 2,
+        "text": "The app keeps logging me out randomly when I try to check my mutual funds. My phone is 555-0198.",
+        "at": "2026-06-09T00:09:09.593890",
+        "app_version": "v2.4.1",
+        "scrubbed_text": "The app keeps logging me out randomly when I try to check my mutual funds. My phone is [PHONE REDACTED].",
+        "cluster_id": 1
+    },
+    "2_example_llm_insight_from_gemini": {
+        "theme_name": "Random Session Logouts",
+        "verbatim_quotes": [
+            "The app keeps logging me out randomly when I try to check my mutual funds."
+        ],
+        "action_ideas": [
+            "Investigate session token expiration logic specifically on Android v2.4.1"
+        ]
+    },
+    "3_final_google_docs_mcp_payload": {
+        "documentId": "mock_google_doc_id_12345",
+        "content": "## Weekly Review Pulse: Week 24 (2026-06-09)\n\nHere are the top themes extracted from recent Google Play Store reviews:\n\n### Theme: Random Session Logouts\n**Verbatim Quotes:**\n- \"The app keeps logging me out randomly when I try to check my mutual funds.\"\n\n**Actionable Ideas for Product/Engineering:**\n- Investigate session token expiration logic specifically on Android v2.4.1\n\n---\n",
+        "action": "append"
+    },
+    "4_final_gmail_mcp_payload": {
+        "to": [
+            "pm-team@groww.in"
+        ],
+        "subject": "Groww Weekly Pulse - Week 24",
+        "body": "\n        <html>\n            <body>\n                <h2>Groww Weekly Pulse (Week 24) is ready!</h2>\n                <p>This week's top themes include: <strong>Random Session Logouts</strong>.</p>\n                <p>Click below to read the full report, verbatim quotes, and action items in Google Docs:</p>\n                <br>\n                <a href=\"https://docs.google.com/document/d/mock...\" style=\"display: inline-block; padding: 10px 20px; background-color: #00E676; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;\">View Full Pulse Report</a>\n            </body>\n        </html>\n        ",
+        "isHtml": true
+    }
+}

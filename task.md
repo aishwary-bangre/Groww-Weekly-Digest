@@ -1,0 +1,23 @@
+# Groww Weekly Review Pulse - Tasks
+
+- `[x]` **Phase 1: Project Foundation & Architecture Skeleton**
+  - `[x]` Initialize the Python project and `requirements.txt`.
+  - `[x]` Create the core directories (`ingestion/`, `reasoning/`, `output/`, `mcp_client/`).
+  - `[x]` Set up basic logging and configuration.
+- `[x]` **Phase 2: Data Ingestion (Google Play)**
+  - `[x]` Implement `IngestionModule` using `google-play-scraper`.
+  - `[x]` Add date filtering (last 8-12 weeks) and normalization.
+- `[x]` **Phase 3: Processing & Reasoning**
+  - `[x]` Implement PII Scrubbing.
+  - `[x]` Implement Embeddings & Clustering (`umap-learn`, `hdbscan`).
+  - `[x]` Integrate LLM for Summarization and Quote Validation.
+- `[x]` **Phase 4: Output Rendering**
+  - `[x]` Implement `OutputGenerator`.
+  - `[x]` Build Markdown/JSON payloads for Docs and Gmail.
+- `[ ]` **Phase 5: MCP Integration & Orchestration**
+  - `[ ]` Implement `MCPClient` for sending Docs and Gmail requests.
+  - `[ ]` Build the CLI entry point (`main.py`).
+  - `[ ]` Implement Idempotency tracking.
+- `[ ]` **Phase 6: Testing & Validation**
+  - `[ ]` Write unit tests.
+  - `[ ]` Perform E2E tests with MCP.
