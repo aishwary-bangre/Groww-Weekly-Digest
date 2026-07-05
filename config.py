@@ -15,7 +15,7 @@ class Config:
     REVIEW_WINDOW_WEEKS = int(os.getenv("REVIEW_WINDOW_WEEKS", 8))
     
     # LLM Settings
-    LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openai") # openai, anthropic, gemini
+    LLM_PROVIDER = os.getenv("LLM_PROVIDER", "groq") # groq, gemini
     
     # MCP Server Connections (placeholder URLs)
     DOCS_MCP_SERVER_URL = os.getenv("DOCS_MCP_SERVER_URL", "http://localhost:8001")
