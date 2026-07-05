@@ -14,7 +14,7 @@ class ThemeInsight(BaseModel):
     action_ideas: List[str] = Field(description="Actionable ideas for the product/engineering team based on the feedback")
 
 class Summarizer:
-    """Integrates with an LLM (Gemini) to extract themes and strictly validate quotes."""
+    """Integrates with an LLM (Llama 3.3 via Groq) to extract themes and strictly validate quotes."""
     
     def __init__(self, api_key: str):
         self.api_key = api_key
