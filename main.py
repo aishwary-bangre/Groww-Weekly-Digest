@@ -20,8 +20,8 @@ def main():
     parser = argparse.ArgumentParser(description="Groww Weekly Review Pulse")
     parser.add_argument("--app", type=str, default="com.nextbillion.groww", help="The Google Play App ID")
     parser.add_argument("--weeks", type=int, default=1, help="Number of weeks of reviews to fetch")
-    # For testing, we use the dummy ID
-    parser.add_argument("--doc-id", type=str, default="1yDummyDocID_PleaseIgnore-1234567890")
+    parser.add_argument("--doc-id", type=str, required=True, help="The target Google Document ID to write the report to")
+    parser.add_argument("--email", type=str, required=True, help="Recipient email address for the Weekly Digest report")
     args = parser.parse_args()
 
     # Calculate ISO week for idempotency
@@ -58,14 +58,14 @@ def main():
     logger.info("--- PHASE 4: OUTPUT GENERATION ---")
     generator = OutputGenerator()
     markdown_content = generator._render_markdown_report(insights)
-    email_payload_dict = generator.generate_email_payload(insights, "https://docs.google.com/document/d/" + args.doc_id, ["aishwarybangre@gmail.com"])
+    email_payload_dict = generator.generate_email_payload(insights, "https://docs.google.com/document/d/" + args.doc_id, [args.email])
     
     logger.info("--- PHASE 5: MCP INTEGRATION ---")
     docs_client = DocsClient()
     docs_client.append_to_doc(args.doc_id, markdown_content)
     
     gmail_client = GmailClient()
-    gmail_client.send_email("aishwarybangre@gmail.com", f"Groww Pulse: {current_iso_week}", email_payload_dict["body"])
+    gmail_client.send_email(args.email, f"Groww Weekly Review Pulse: {current_iso_week}", email_payload_dict["body"])
     
     # Mark Success
     mark_week_processed(current_iso_week)
