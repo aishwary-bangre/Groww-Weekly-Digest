@@ -19,7 +19,7 @@ flowchart TD
         subgraph Reasoning Engine
             Embed[Vectorization<br><i>sentence-transformers</i>]
             Cluster[Density Clustering<br><i>UMAP + HDBSCAN</i>]
-            LLM[Theme & Quote Extraction<br><i>Google Gemini</i>]
+            LLM[Theme & Quote Extraction<br><i>Groq / Llama-3.3</i>]
         end
         
         Validate[Quote Verifier<br><i>Anti-Hallucination Gate</i>]
@@ -89,7 +89,7 @@ classDiagram
 | **Ingestion** | `google-play-scraper` (Python) | Robust, open-source library that handles pagination and API limits effectively without requiring direct Google Developer Console credentials. |
 | **Embeddings** | `sentence-transformers` | Runs locally, incredibly fast, and avoids token costs for simply clustering data prior to the heavy LLM lifting. |
 | **Clustering** | `UMAP` + `HDBSCAN` | UMAP reduces high-dimensional vector space so HDBSCAN can find dense clusters of similar reviews. This is far superior to K-Means because it doesn't force outliers into clusters (HDBSCAN has a concept of "noise"). |
-| **LLM Synthesis** | Google Gemini (1.5 Flash/Pro) | Chosen specifically for its massive context window (1M+ tokens), allowing us to pass entire clusters of reviews in a single prompt for accurate theme naming. |
+| **LLM Synthesis** | Groq (`llama-3.3-70b`) | Migrated from Gemini to Groq's LPU infrastructure to completely bypass HTTP 429 API rate limits and reduce inference latency to near-instant speeds for concurrent cluster processing. |
 | **Delivery** | Model Context Protocol (MCP) | Ensures the core reasoning agent is completely decoupled from Google Workspace authentication. |
 
 ## 4. MCP Integration & Security Sequence
